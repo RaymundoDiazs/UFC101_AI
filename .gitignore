@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Datos grandes (no subir al repo)
+data/
+runs/
+checkpoints/
+logs/
+*.pt
+*.pth
+*.pkl
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store

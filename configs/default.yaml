@@ -1,0 +1,33 @@
+# Ruta a los datos (carpetas por clase con .pkl por video)
+data_root: "./data/ucf101_skeletons"
+
+# Clases seleccionadas (usa índices de las carpetas que tengas)
+classes:
+  - "0"
+  - "1"
+  - "2"
+  - "3"
+  - "4"
+
+# Entrenamiento
+seed: 42
+val_ratio: 0.2
+num_workers: 4
+pin_memory: true
+
+# Secuencias
+T: 64
+J: 17
+pelvis_index: 0
+height_pair: [5, 11]
+
+# Modelo
+hidden_size: 128
+num_layers: 1
+
+# Optimización
+lr: 0.001
+epochs: 15
+batch_size: 64
+label_smoothing: 0.0
+dropout: 0.0
