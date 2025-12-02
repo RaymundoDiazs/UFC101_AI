@@ -1,7 +1,7 @@
-# Ruta a los datos (carpetas por clase con .pkl por video)
+# file a descargar ruta con esqueletos
 data_root: "./data/ucf101_skeletons"
 
-# Clases seleccionadas (usa índices de las carpetas que tengas)
+#clases seleccionadas
 classes:
   - "0"
   - "1"
@@ -9,23 +9,23 @@ classes:
   - "3"
   - "4"
 
-# Entrenamiento
+#training
 seed: 42
 val_ratio: 0.2
 num_workers: 4
 pin_memory: true
 
-# Secuencias
+#secuencias
 T: 64
 J: 17
 pelvis_index: 0
 height_pair: [5, 11]
 
-# Modelo
+#model
 hidden_size: 128
 num_layers: 1
 
-# Optimización
+# optimize
 lr: 0.001
 epochs: 15
 batch_size: 64

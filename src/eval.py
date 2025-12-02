@@ -7,7 +7,6 @@ from torch.utils.data import DataLoader
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 import matplotlib.pyplot as plt
 
-# seaborn es opcional: si no está, graficamos con matplotlib puro
 try:
     import seaborn as sns
     _HAS_SNS = True
@@ -18,7 +17,7 @@ from .datasets import SkeletonVideoDataset, make_splits
 
 
 def _to_str_labels(labels):
-    # Asegura que las etiquetas (por ej. "0","1",...) sean str y no ints
+    # Asegura que las etiquetas sean strings
     return [str(c) for c in labels]
 
 
@@ -39,7 +38,7 @@ def plot_confusion(cm: np.ndarray, classes, out_png: str, title: str = ""):
             square=False,
         )
     else:
-        # Para muchos clases o si no hay seaborn
+        #else
         plt.imshow(cm, interpolation="nearest", cmap="Blues")
         plt.colorbar()
         plt.xticks(ticks=np.arange(n), labels=classes, rotation=90)
@@ -69,7 +68,7 @@ def main():
     ckpt = torch.load(args.ckpt, map_location=device)
     classes = ckpt["classes"]  # mismas clases usadas en train
 
-    # Reproducir el split de validación
+    #Reproducir el split de validacion
     train_items, val_items = make_splits(
         cfg["data_root"], classes, cfg["val_ratio"], cfg["seed"]
     )
@@ -89,7 +88,7 @@ def main():
         val_ds, batch_size=64, shuffle=False, num_workers=num_workers
     )
 
-    # Reconstruir modelo (intentamos Improved, si falla Baseline)
+    # Reconstruir modelo 
     in_dim = cfg["J"] * 2
     num_classes = len(classes)
     from .models.improved_lstm import ImprovedLSTM

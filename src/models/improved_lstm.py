@@ -5,7 +5,7 @@ import torch.nn as nn
 class ImprovedLSTM(nn.Module):
     def __init__(self, in_dim: int, hidden: int, num_layers: int, num_classes: int, dropout: float = 0.3):
         super().__init__()
-        # dropout interno solo si num_layers > 1
+        #num layer menor 1, dropout
         self.lstm = nn.LSTM(
             in_dim,
             hidden,
@@ -17,9 +17,9 @@ class ImprovedLSTM(nn.Module):
         self.bn = nn.BatchNorm1d(hidden)
         self.fc = nn.Linear(hidden, num_classes)
 
-    def forward(self, x):  # x: [B,T,in_dim]
+    def forward(self, x): 
         _, (h, _) = self.lstm(x)
-        h_last = h[-1]  # [B, hidden]
+        h_last = h[-1]
         h_last = self.bn(h_last)
         h_last = self.dropout(h_last)
         logits = self.fc(h_last)

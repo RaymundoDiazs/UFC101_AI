@@ -1,13 +1,4 @@
-"""
-Visualizador sencillo de esqueletos 2D del dataset UCF101 Skeletons.
 
-Este script:
-1. Selecciona aleatoriamente un archivo .pkl del dataset.
-2. Extrae una secuencia de keypoints con forma [T, J, 2].
-3. Toma tres frames representativos (inicio, mitad y fin).
-4. Dibuja los puntos y conexiones básicas (a la manera COCO).
-5. Guarda la visualización en runs/visualizations/.
-"""
 
 import pickle
 import glob
@@ -17,32 +8,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# ================================================================
-# 1) Seleccionar un archivo .pkl aleatorio del dataset
-# ================================================================
+#  Seleccionar un archivo .pkl aleatorio del dataset
+
 
 rutas_pkl = glob.glob("data/ucf101_skeletons/*/*.pkl")
 if not rutas_pkl:
     raise FileNotFoundError("No se encontraron archivos .pkl en data/ucf101_skeletons/")
 
 ruta_sample = random.choice(rutas_pkl)
-print(f"📌 Mostrando ejemplo: {ruta_sample}")
+print(f"Mostrando ejemplo: {ruta_sample}")
 
 
-# ================================================================
-# 2) Cargar la secuencia y asegurar forma [T, J, 2]
-# ================================================================
+# Cargar la secuencia y asegurar forma [T, J, 2]
+
 
 obj = pickle.load(open(ruta_sample, "rb"))
 
-# Intentar leer 'data' o 'keypoint'
+#lee del keypoint
 keypoints = obj.get("data", obj.get("keypoint"))
 if keypoints is None:
     raise ValueError(f"El archivo no tiene keypoints válidos: {ruta_sample}")
 
 arr = np.asarray(keypoints, dtype="float32")
 
-# Formato posible: [M, T, V, 2] → tomamos la primera persona
+#
 if arr.ndim == 4:
     arr = arr[0]
 elif arr.ndim != 3:
@@ -52,21 +41,17 @@ skel = arr  # [T, J, 2]
 num_frames = skel.shape[0]
 
 
-# ================================================================
-# 3) Elegir tres frames representativos de la secuencia
-# ================================================================
 
-# Usamos linspace para obtener inicio, mitad y fin
+#elege tres frames 
+
+
 frames_mostrar = np.unique(np.linspace(0, num_frames - 1, 3, dtype=int))
 
-# Si por alguna razón linspace devuelve duplicados (p. ej. T=2)
+#dupes
 if frames_mostrar.size < 3 and num_frames >= 3:
     frames_mostrar = np.array([0, num_frames // 2, num_frames - 1])
 
-
-# ================================================================
-# 4) Definir las conexiones entre articulaciones (aprox COCO)
-# ================================================================
+#conexiones
 
 conexiones = [
     (5, 7), (7, 9), (6, 8), (8, 10),        # brazos
@@ -75,20 +60,19 @@ conexiones = [
 ]
 
 
-# ================================================================
-# 5) Dibujar los esqueletos
-# ================================================================
+
+# dibujar los esqueletos
 
 fig, axes = plt.subplots(1, 3, figsize=(12, 4))
 
 for ax, frame_idx in zip(axes, frames_mostrar):
-    # Puntos del esqueleto en este frame
+    #puntos del esqueleto en el frame
     puntos = skel[frame_idx]  # [J, 2]
 
-    # Dibujar articulaciones (scatter)
+    #dibujar articulaciones 
     ax.scatter(puntos[:, 0], -puntos[:, 1], s=20, color="red")
 
-    # Dibujar conexiones (líneas)
+    #dibujar conexiones 
     for j1, j2 in conexiones:
         ax.plot(
             [puntos[j1, 0], puntos[j2, 0]],
@@ -109,9 +93,8 @@ fig.suptitle(
 plt.tight_layout()
 
 
-# ================================================================
 # 6) Guardar la imagen en la carpeta runs
-# ================================================================
+
 
 output_dir = "runs/visualizations"
 os.makedirs(output_dir, exist_ok=True)
@@ -119,6 +102,6 @@ os.makedirs(output_dir, exist_ok=True)
 output_path = os.path.join(output_dir, "skeleton_triptych.png")
 plt.savefig(output_path, dpi=150)
 
-print(f"✅ Imagen guardada en: {output_path}")
+print(f"Imagen guardada en: {output_path}")
 
 plt.show()
