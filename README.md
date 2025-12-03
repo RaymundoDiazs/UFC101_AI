@@ -13,10 +13,13 @@ Este proyecto implementa un modelo de Deep Learning eficaz capaz de reconocer ac
 git clone [https://github.com/RaymundoDiazs/UFC101_AI.git](https://github.com/RaymundoDiazs/UFC101_AI.git)
 cd UFC101_AI
 2. Instalar dependencias:
+```
 
 Bash
 
+```bash
 pip install -r requirements.txt
+```
 Datos y Preparación
 Dataset UCF101 Skeletons
 Se utilizaron las anotaciones de esqueletos 2D contenidas en el archivo ucf101_2d.pkl.
@@ -32,8 +35,11 @@ Ejecuta el script de preparación:
 
 Bash
 
+```bash
 python prepare_data.py
-Nota: Este script procesa el archivo masivo y genera miles de archivos individuales .pkl en la carpeta data/ucf101_skeletons/, necesarios para el entrenamiento e inferencia.
+```
+
+Nota: Este script procesa un archivo y los divide de archivos individuales .pkl en la carpeta data/ucf101_skeletons/, necesarios para el entrenamiento e inferencia.
 
 Modelos Implementados
 El proyecto compara dos arquitecturas ubicadas en src/models/:
@@ -52,25 +58,31 @@ Para probar el modelo con un video específico usando el checkpoint pre-entrenad
 
 Bash
 
+```bash
 python -m src.infer \
   --config configs/default.yaml \
   --ckpt runs/baseline/best.pt \
   --input data/ucf101_skeletons/0/0_v_ApplyEyeMakeup_g01_c01.pkl
-(Asegúrate de cambiar la ruta --input por un archivo real generado en tu carpeta data/).
+(cambia la ruta --input por un archivo real generado en tu carpeta data/).
+```
 
 2. Entrenamiento
 Para entrenar los modelos desde cero:
 
 Bash
 
+```bash
 # Entrenar Baseline
 python -m src.train --config configs/default.yaml --model baseline
+```
 
 # Entrenar Improved (con Dropout)
 python -m src.train --config configs/default.yaml --model improved --dropout 0.4
+
 3. Evaluación
 Para obtener métricas del set de validación:
 
 Bash
-
+```bash
 python -m src.eval --config configs/default.yaml --ckpt runs/baseline/best.pt
+```
